@@ -1,0 +1,47 @@
+---
+
+- name: create digital_ocean
+  hosts: localhost
+  connection: local
+  vars_files:
+      - do_vars.yml
+  vars:
+      do_region_id: sfo2
+
+  tasks:
+      - name: create new droplet.
+        digital_ocean:
+            state: present
+            command: droplet
+            name: debian-512mb-ss
+            api_token: "{{ do_api_token }}"
+            size_id: 512mb
+            region_id: "{{ do_region_id }}"
+            image_id: debian-8-x64
+            wait: yes
+            ssh_key_ids: "{{ do_ssh_key_ids }}"
+            unique_name: yes
+        register: my_droplet
+
+      - add_host:
+          name: "{{ my_droplet.droplet.ip_address }}"
+          groups: shadowsocks
+          ansible_ssh_user: root
+
+      - template:
+          src: shadowsocks.json.j2
+          dest: ./shadowsocks.json
+
+- hosts: shadowsocks
+  handlers:
+      - name: restart shadowsocks
+        service: name=shadowsocks state=restarted enabled=yes
+  tasks:
+      - apt: name={{ item }} update_cache=yes cache_valid_time=3600 state=present
+        with_items:
+            - shadowsocks
+
+      - copy:
+          src: shadowsocks.json
+          dest: /etc/shadowsocks/config.json
+        notify: restart shadowsocks
