@@ -28,6 +28,10 @@
           groups: shadowsocks
           ansible_ssh_user: root
 
+      - wait_for:
+          host: "{{ my_droplet.droplet.ip_address }}"
+          port: 22
+
       - template:
           src: shadowsocks.json.j2
           dest: ./shadowsocks.json
