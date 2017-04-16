@@ -1,0 +1,5 @@
+---
+do_region_id: sfo2
+do_image_id: debian-8-x64
+do_size_id: 512mb
+do_name: debian-512mb-ss

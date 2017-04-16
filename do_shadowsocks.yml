@@ -5,19 +5,18 @@
   connection: local
   vars_files:
       - do_vars.yml
-  vars:
-      do_region_id: sfo2
+      - do_ss_vars.yml
 
   tasks:
       - name: create new droplet.
         digital_ocean:
             state: present
             command: droplet
-            name: debian-512mb-ss
+            name: "{{ do_name }}"
             api_token: "{{ do_api_token }}"
-            size_id: 512mb
+            size_id: "{{ do_size_id }}"
             region_id: "{{ do_region_id }}"
-            image_id: debian-8-x64
+            image_id: "{{ do_image_id }}"
             wait: yes
             ssh_key_ids: "{{ do_ssh_key_ids }}"
             unique_name: yes

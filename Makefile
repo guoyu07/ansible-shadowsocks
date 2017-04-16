@@ -5,3 +5,6 @@ ssserver:
 
 sslocal:
 	sslocal -c shadowsocks.json
+
+destory:
+	ansible-playbook do_destory.yml --vault-password-file ~/.ansible/vault_pass.txt
