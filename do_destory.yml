@@ -5,7 +5,7 @@
   connection: local
   vars_files:
       - do_vars.yml
-      - do_ss_vars.yml
+      - do_secret_vars.yml
 
   tasks:
       - name: destory droplet.
